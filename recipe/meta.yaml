@@ -19,10 +19,11 @@ requirements:
   host:
     - python >=3.6,<4.0
     - pip
+    - wheel
+    - setuptools
     - poetry-core >=1.0.0
   run:
     - python >=3.6,<4.0
-    - setuptools
 
 test:
   imports:
@@ -38,6 +39,7 @@ about:
   home: https://github.com/timothycrosley/isort
   license: MIT
   license_file: LICENSE
+  license_family: MIT
   summary: A Python utility / library to sort Python imports.
   description: |
     isort is a Python utility / library to sort imports alphabetically, and
