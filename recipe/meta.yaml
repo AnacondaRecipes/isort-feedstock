@@ -1,4 +1,4 @@
-{% set version = "5.8.0" %}
+{% set version = "5.9.1" %}
 
 package:
   name: isort
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/i/isort/isort-{{ version }}.tar.gz
-  sha256: 0a943902919f65c5684ac4e0154b1ad4fac6dcaa5d9f3426b732f1c8b5419be6
+  sha256: 83510593e07e433b77bd5bff0f6f607dbafa06d1a89022616f02d8b699cfcd56
 
 build:
   number: 0
@@ -19,10 +19,11 @@ requirements:
   host:
     - python >=3.6,<4.0
     - pip
+    - wheel
+    - setuptools
     - poetry-core >=1.0.0
   run:
     - python >=3.6,<4.0
-    - setuptools
 
 test:
   imports:
@@ -38,6 +39,7 @@ about:
   home: https://github.com/timothycrosley/isort
   license: MIT
   license_file: LICENSE
+  license_family: MIT
   summary: A Python utility / library to sort Python imports.
   description: |
     isort is a Python utility / library to sort imports alphabetically, and
