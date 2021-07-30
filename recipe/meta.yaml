@@ -11,19 +11,20 @@ source:
 build:
   number: 0
   noarch: python
+  skip: True  # [py<36]
   script: {{ PYTHON }} -m pip install . -vv
   entry_points:
     - isort = isort.main:main
 
 requirements:
   host:
-    - python >=3.6.1,<4.0
+    - python
     - pip
     - wheel
     - setuptools
     - poetry-core >=1.0.0
   run:
-    - python >=3.6.1,<4.0
+    - python
 
 test:
   imports:
