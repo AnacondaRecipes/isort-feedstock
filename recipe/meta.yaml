@@ -10,6 +10,7 @@ source:
 
 build:
   number: 0
+  skip: True  # [py<36]
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
   entry_points:
@@ -17,13 +18,15 @@ build:
 
 requirements:
   host:
-    - python >=3.6.1,<4.0
+    - python
     - pip
     - wheel
     - setuptools
     - poetry-core >=1.0.0
+    - toml
   run:
     - python >=3.6.1,<4.0
+    - toml
 
 test:
   imports:
