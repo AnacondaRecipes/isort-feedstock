@@ -46,8 +46,7 @@ about:
     Python library and plugins for various editors to quickly sort all your
     imports. It currently cleanly supports Python 2.6 - 3.5 using pies to
     achieve this without ugly hacks and/or py2to3.
-  doc_url: http://isort.readthedocs.io/en/latest/
-  doc_source_url: https://github.com/timothycrosley/isort/blob/develop/README.rst
+  doc_url: https://pycqa.github.io/isort/
   dev_url: https://github.com/timothycrosley/isort
 
 extra:
