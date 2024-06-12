@@ -19,20 +19,42 @@ requirements:
   host:
     - python
     - pip
-    - wheel
-    - setuptools
     - poetry-core >=1.0.0
   run:
     - python
+  run_constrained:
+    - colorama >=0.4.6
+
+# Skipping tests since pylama is unavailable
+{% set tests_to_skip = "--ignore=tests/unit/test_deprecated_finders.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_format.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_hooks.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_importable.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_place.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_ticketed_features.py" %}
+{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/profiles/test_black.py" %}
 
 test:
+  source_files:
+    - tests/unit/
   imports:
     - isort
   commands:
     - pip check
     - isort --help
+    - pytest tests/unit/ -v {{ tests_to_skip }}
   requires:
     - pip
+    - pytest
+    - anyio
+    - coverage
+    - exceptiongroup
+    - hypothesis
+    - psutil
+    - pytest-mock
+    - trustme
+    - uvloop
 
 about:
   home: https://github.com/timothycrosley/isort
