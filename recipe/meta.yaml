@@ -37,6 +37,7 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_isort_supports_shared_profiles_issue_970" %}
 {% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
 {% set tests_to_skip = tests_to_skip + " or test_black_pyi_file" %}
+{% set tests_to_skip = tests_to_skip + " or test_gitignore" %}  # [not osx]
 
 test:
   source_files:
@@ -57,7 +58,7 @@ test:
     - psutil
     - pytest-mock
     - trustme
-    - uvloop
+    - uvloop  # [unix]
 
 about:
   home: https://github.com/timothycrosley/isort
