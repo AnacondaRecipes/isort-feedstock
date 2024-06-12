@@ -26,14 +26,17 @@ requirements:
     - colorama >=0.4.6
 
 # Skipping tests since pylama is unavailable
-{% set tests_to_skip = "--ignore=tests/unit/test_deprecated_finders.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_format.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_hooks.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_importable.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_place.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/test_ticketed_features.py" %}
-{% set tests_to_skip = tests_to_skip + " --ignore=tests/unit/profiles/test_black.py" %}
+{% set test_files_to_skip = " --ignore=tests/unit/test_format.py" %}
+{% set test_files_to_skip = test_files_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
+# Skipping due to various errors
+{% set tests_to_skip = "test_requirements_dir" %}
+{% set tests_to_skip = tests_to_skip + " or test_requirements_finder" %}
+{% set tests_to_skip = tests_to_skip + " or test_git_hook" %}
+{% set tests_to_skip = tests_to_skip + " or test_importable" %}
+{% set tests_to_skip = tests_to_skip + " or test_module" %}
+{% set tests_to_skip = tests_to_skip + " or test_isort_supports_shared_profiles_issue_970" %}
+{% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
+{% set tests_to_skip = tests_to_skip + " or test_black_pyi_file" %}
 
 test:
   source_files:
@@ -43,7 +46,7 @@ test:
   commands:
     - pip check
     - isort --help
-    - pytest tests/unit/ -v {{ tests_to_skip }}
+    - pytest tests/unit/ -v {{ test_files_to_skip }} -k "not({{ tests_to_skip }})"
   requires:
     - pip
     - pytest
