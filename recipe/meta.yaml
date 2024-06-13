@@ -1,4 +1,4 @@
-{% set version = "5.9.3" %}
+{% set version = "5.13.2" %}
 
 package:
   name: isort
@@ -6,34 +6,59 @@ package:
 
 source:
   url: https://pypi.io/packages/source/i/isort/isort-{{ version }}.tar.gz
-  sha256: 9c2ea1e62d871267b78307fe511c0838ba0da28698c5732d54e2790bf3ba9899
+  sha256: 48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109
 
 build:
   number: 0
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: True  # [py<38]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
 
 requirements:
   host:
-    - python >=3.6.1,<4.0
+    - python
     - pip
-    - wheel
-    - setuptools
     - poetry-core >=1.0.0
   run:
-    - python >=3.6.1,<4.0
+    - python
+  run_constrained:
+    - colorama >=0.4.6
+
+# Skipping tests since pylama is unavailable
+{% set test_files_to_skip = " --ignore=tests/unit/test_format.py" %}
+{% set test_files_to_skip = test_files_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
+# Skipping due to various errors
+{% set tests_to_skip = "test_requirements_dir" %}
+{% set tests_to_skip = tests_to_skip + " or test_requirements_finder" %}
+{% set tests_to_skip = tests_to_skip + " or test_git_hook" %}
+{% set tests_to_skip = tests_to_skip + " or test_importable" %}
+{% set tests_to_skip = tests_to_skip + " or test_module" %}
+{% set tests_to_skip = tests_to_skip + " or test_isort_supports_shared_profiles_issue_970" %}
+{% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
+{% set tests_to_skip = tests_to_skip + " or test_black_pyi_file" %}
+{% set tests_to_skip = tests_to_skip + " or test_gitignore" %}  # [not osx]
 
 test:
+  source_files:
+    - tests/unit/
   imports:
     - isort
-    - isort._future
   commands:
     - pip check
     - isort --help
+    - pytest tests/unit/ -v {{ test_files_to_skip }} -k "not({{ tests_to_skip }})"
   requires:
     - pip
+    - pytest
+    - anyio
+    - coverage
+    - exceptiongroup
+    - hypothesis
+    - psutil
+    - pytest-mock
+    - trustme
+    - uvloop  # [unix]
 
 about:
   home: https://github.com/timothycrosley/isort
@@ -47,8 +72,7 @@ about:
     Python library and plugins for various editors to quickly sort all your
     imports. It currently cleanly supports Python 2.6 - 3.5 using pies to
     achieve this without ugly hacks and/or py2to3.
-  doc_url: http://isort.readthedocs.io/en/latest/
-  doc_source_url: https://github.com/timothycrosley/isort/blob/develop/README.rst
+  doc_url: https://pycqa.github.io/isort/
   dev_url: https://github.com/timothycrosley/isort
 
 extra:
