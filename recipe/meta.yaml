@@ -36,7 +36,6 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_module" %}
 {% set tests_to_skip = tests_to_skip + " or test_isort_supports_shared_profiles_issue_970" %}
 {% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
-# {% set tests_to_skip = tests_to_skip + " or test_black_pyi_file" %}
 {% set tests_to_skip = tests_to_skip + " or test_gitignore" %}  # [not osx]
 
 test:
