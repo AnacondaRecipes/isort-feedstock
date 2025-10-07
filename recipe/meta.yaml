@@ -1,34 +1,6 @@
-{% set version = "6.0.1" %}
-
-package:
-  name: isort
-  version: {{ version }}
-
-source:
-  url: https://pypi.io/packages/source/i/isort/isort-{{ version }}.tar.gz
-  sha256: 1cb5df28dfbc742e490c5e41bad6da41b805b0a8be7bc93cd0fb2a8a890ac450
-
-build:
-  number: 0
-  skip: True  # [py<39]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  entry_points:
-    - isort = isort.main:main
-
-requirements:
-  host:
-    - python
-    - pip
-    - hatchling
-  run:
-    - python
-  run_constrained:
-    - colorama >=0.4.6
-
-# Skipping tests since pylama is unavailable
+{% set version = "6.1.0" %}
 {% set test_files_to_skip = " --ignore=tests/unit/test_format.py" %}
 {% set test_files_to_skip = test_files_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
-# Skipping due to various errors
 {% set tests_to_skip = "test_requirements_dir" %}
 {% set tests_to_skip = tests_to_skip + " or test_requirements_finder" %}
 {% set tests_to_skip = tests_to_skip + " or test_git_hook" %}
@@ -38,6 +10,35 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
 {% set tests_to_skip = tests_to_skip + " or test_gitignore" %}  # [not osx]
 
+package:
+  name: isort
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/i/isort/isort-{{ version }}.tar.gz
+  sha256: 9b8f96a14cfee0677e78e941ff62f03769a06d412aabb9e2a90487b3b7e8d481
+
+build:
+  number: 0
+  skip: true  # [py<390]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  entry_points:
+    - isort = isort.main:main
+
+requirements:
+  host:
+    - python
+    - pip
+    - hatchling
+    - hatch-vcs
+  run:
+    - python
+    - importlib-metadata >=4.6.0  # [py<310]
+  run_constrained:
+    - colorama >=0.4.6
+
+# Skipping tests since pylama is unavailable
+# Skipping due to various errors
 test:
   source_files:
     - tests/unit/
