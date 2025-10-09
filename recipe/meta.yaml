@@ -1,12 +1,13 @@
-{% set version = "6.0.1" %}
+{% set name = "isort" %}
+{% set version = "6.1.0" %}
 
 package:
-  name: isort
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/i/isort/isort-{{ version }}.tar.gz
-  sha256: 1cb5df28dfbc742e490c5e41bad6da41b805b0a8be7bc93cd0fb2a8a890ac450
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 9b8f96a14cfee0677e78e941ff62f03769a06d412aabb9e2a90487b3b7e8d481
 
 build:
   number: 0
@@ -20,33 +21,40 @@ requirements:
     - python
     - pip
     - hatchling
+    - hatch-vcs
   run:
     - python
-  run_constrained:
-    - colorama >=0.4.6
+    - importlib_metadata >=4.6.0
 
-# Skipping tests since pylama is unavailable
-{% set test_files_to_skip = " --ignore=tests/unit/test_format.py" %}
-{% set test_files_to_skip = test_files_to_skip + " --ignore=tests/unit/test_pylama_isort.py" %}
-# Skipping due to various errors
-{% set tests_to_skip = "test_requirements_dir" %}
-{% set tests_to_skip = tests_to_skip + " or test_requirements_finder" %}
-{% set tests_to_skip = tests_to_skip + " or test_git_hook" %}
-{% set tests_to_skip = tests_to_skip + " or test_importable" %}
-{% set tests_to_skip = tests_to_skip + " or test_module" %}
-{% set tests_to_skip = tests_to_skip + " or test_isort_supports_shared_profiles_issue_970" %}
-{% set tests_to_skip = tests_to_skip + " or test_sort_configurable_sort_issue_1732" %}
-{% set tests_to_skip = tests_to_skip + " or test_gitignore" %}  # [not osx]
+# E   ModuleNotFoundError: No module named 'pylama'
+{% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
+{% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
+# >   assert test_finder.find("x")
+# E   AssertionError: assert None
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::TestRequirementsFinder::test_requirements_dir" %}
+# >   assert len(files) == 1  # file finding
+# E   AssertionError: assert 3 == 1
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::test_requirements_finder" %}
+# >   raise InvalidSettingsPath(settings_path)
+# E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook" %}
+# >   assert place_tester("isort") == sections.FIRSTPARTY
+# E   AssertionError: assert 'THIRDPARTY' == 'FIRSTPARTY'
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_place.py::test_module" %}
+# >   raise ProfileDoesNotExist(profile_name)
+# E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
 
 test:
   source_files:
-    - tests/unit/
+    - tests/unit
   imports:
     - isort
   commands:
     - pip check
     - isort --help
-    - pytest tests/unit/ -v {{ test_files_to_skip }} -k "not({{ tests_to_skip }})"
+    - pytest -v tests/unit {{ ignore_tests }} {{ deselect_tests }}
   requires:
     - pip
     - pytest
@@ -58,6 +66,8 @@ test:
     - pytest-mock
     - trustme
     - uvloop  # [unix]
+    - black
+    - colorama
 
 about:
   home: https://github.com/timothycrosley/isort
@@ -71,7 +81,7 @@ about:
     Python library and plugins for various editors to quickly sort all your
     imports. It currently cleanly supports Python 2.6 - 3.5 using pies to
     achieve this without ugly hacks and/or py2to3.
-  doc_url: https://pycqa.github.io/isort/
+  doc_url: https://pycqa.github.io/isort
   dev_url: https://github.com/timothycrosley/isort
 
 extra:
