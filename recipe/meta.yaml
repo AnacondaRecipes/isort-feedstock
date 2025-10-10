@@ -15,7 +15,7 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
-    - isort-identify-imports = "isort.main:identify_imports_main"
+    - isort-identify-imports = isort.main:identify_imports_main
 
 requirements:
   host:
