@@ -15,6 +15,7 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
+    - isort-identify-imports = "isort.main:identify_imports_main"
 
 requirements:
   host:
@@ -24,7 +25,7 @@ requirements:
     - hatch-vcs
   run:
     - python
-    - importlib_metadata >=4.6.0
+    - importlib_metadata >=4.6.0  # [py<310]
 
 # E   ModuleNotFoundError: No module named 'pylama'
 {% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
@@ -54,6 +55,7 @@ test:
   commands:
     - pip check
     - isort --help
+    - isort-identify-imports --help
     - pytest -v tests/unit {{ ignore_tests }} {{ deselect_tests }}
   requires:
     - pip
