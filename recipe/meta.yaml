@@ -1,17 +1,25 @@
 {% set name = "isort" %}
-{% set version = "6.1.0" %}
+{% set version = "7.0.0" %}
+{% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
+{% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::TestRequirementsFinder::test_requirements_dir"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::test_requirements_finder"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_place.py::test_module"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732"' %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9b8f96a14cfee0677e78e941ff62f03769a06d412aabb9e2a90487b3b7e8d481
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187
 
 build:
   number: 0
-  skip: True  # [py<39]
+  skip: true  # [py<3100]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
@@ -28,25 +36,16 @@ requirements:
     - importlib_metadata >=4.6.0  # [py<310]
 
 # E   ModuleNotFoundError: No module named 'pylama'
-{% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
-{% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
 # >   assert test_finder.find("x")
 # E   AssertionError: assert None
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::TestRequirementsFinder::test_requirements_dir" %}
 # >   assert len(files) == 1  # file finding
 # E   AssertionError: assert 3 == 1
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::test_requirements_finder" %}
 # >   raise InvalidSettingsPath(settings_path)
 # E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook" %}
 # >   assert place_tester("isort") == sections.FIRSTPARTY
 # E   AssertionError: assert 'THIRDPARTY' == 'FIRSTPARTY'
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_place.py::test_module" %}
 # >   raise ProfileDoesNotExist(profile_name)
 # E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
-
 test:
   source_files:
     - tests/unit
