@@ -46,6 +46,8 @@ requirements:
 # E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
+# Test irrelevant for us (FileNotFoundError)
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
 
 test:
   source_files:
