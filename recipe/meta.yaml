@@ -72,6 +72,7 @@ test:
     - uvloop  # [unix]
     - black
     - colorama
+    - setuptools  # [py>=314]
 
 about:
   home: https://github.com/timothycrosley/isort
