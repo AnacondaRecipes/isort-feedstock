@@ -1,5 +1,5 @@
 {% set name = "isort" %}
-{% set version = "6.1.0" %}
+{% set version = "7.0.0" %}
 
 package:
   name: {{ name }}
@@ -7,11 +7,11 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9b8f96a14cfee0677e78e941ff62f03769a06d412aabb9e2a90487b3b7e8d481
+  sha256: 5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187
 
 build:
   number: 0
-  skip: True  # [py<39]
+  skip: True  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
@@ -46,6 +46,8 @@ requirements:
 # E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
+# Test irrelevant for us (FileNotFoundError)
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
 
 test:
   source_files:
@@ -70,6 +72,7 @@ test:
     - uvloop  # [unix]
     - black
     - colorama
+    - setuptools  # [py>=314]
 
 about:
   home: https://github.com/timothycrosley/isort
