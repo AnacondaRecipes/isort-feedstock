@@ -1,21 +1,21 @@
 {% set name = "isort" %}
-{% set version = "7.0.0" %}
+{% set version = "8.0.1" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d
 
 build:
   number: 0
-  skip: True  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
     - isort-identify-imports = isort.main:identify_imports_main
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -25,17 +25,10 @@ requirements:
     - hatch-vcs
   run:
     - python
-    - importlib_metadata >=4.6.0  # [py<310]
 
 # E   ModuleNotFoundError: No module named 'pylama'
 {% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
 {% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
-# >   assert test_finder.find("x")
-# E   AssertionError: assert None
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::TestRequirementsFinder::test_requirements_dir" %}
-# >   assert len(files) == 1  # file finding
-# E   AssertionError: assert 3 == 1
-{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::test_requirements_finder" %}
 # >   raise InvalidSettingsPath(settings_path)
 # E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook" %}
