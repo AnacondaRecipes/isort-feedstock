@@ -25,17 +25,10 @@ requirements:
     - hatch-vcs
   run:
     - python
-    - importlib_metadata >=4.6.0  # [py<310]
 
 # E   ModuleNotFoundError: No module named 'pylama'
 {% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
 {% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
-# >   assert test_finder.find("x")
-# E   AssertionError: assert None
-#{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::TestRequirementsFinder::test_requirements_dir" %}
-# >   assert len(files) == 1  # file finding
-# E   AssertionError: assert 3 == 1
-#{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_deprecated_finders.py::test_requirements_finder" %}
 # >   raise InvalidSettingsPath(settings_path)
 # E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook" %}
@@ -47,7 +40,7 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
 # Test irrelevant for us (FileNotFoundError)
-#{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
 
 test:
   source_files:
