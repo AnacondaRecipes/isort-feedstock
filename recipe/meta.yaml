@@ -10,7 +10,7 @@ source:
   sha256: 171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
