@@ -63,7 +63,7 @@ test:
     - pytest-mock
     - trustme
     - uvloop  # [unix]
-    - black
+    - black # [not (win and arm64)]
     - colorama
     - setuptools  # [py>=314]
 
