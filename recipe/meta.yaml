@@ -29,7 +29,7 @@ requirements:
 # E   ModuleNotFoundError: No module named 'pylama'
 {% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
 # black module is unavailable on Windows ARM64, so we skip tests that require it
-{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %} # [not (win and arm64)]
+{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %} # [win and arm64]
 {% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
 # >   raise InvalidSettingsPath(settings_path)
 # E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
