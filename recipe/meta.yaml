@@ -1,23 +1,6 @@
 {% set name = "isort" %}
 {% set version = "9.0.1" %}
-{% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %}  # [win and arm64]
-{% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_place.py::test_module"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore "' %}
 
-# E   ModuleNotFoundError: No module named 'pylama'
-# black module is unavailable on Windows ARM64, so we skip tests that require it
-# >   raise InvalidSettingsPath(settings_path)
-# E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
-# >   assert place_tester("isort") == sections.FIRSTPARTY
-# E   AssertionError: assert 'THIRDPARTY' == 'FIRSTPARTY'
-# >   raise ProfileDoesNotExist(profile_name)
-# E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
-# Test irrelevant for us (FileNotFoundError)
 package:
   name: {{ name }}
   version: {{ version }}
@@ -32,7 +15,7 @@ build:
   entry_points:
     - isort = isort.main:main
     - isort-identify-imports = isort.main:identify_imports_main
-  skip: true  # [py<3100]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -40,11 +23,27 @@ requirements:
     - pip
     - hatchling
     - hatch-vcs
-    - hatch-mypyc
   run:
     - python
     - mypy_extensions >=1.1.0
 
+# E   ModuleNotFoundError: No module named 'pylama'
+# black module is unavailable on Windows ARM64, so we skip tests that require it
+# >   raise InvalidSettingsPath(settings_path)
+# E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
+# >   assert place_tester("isort") == sections.FIRSTPARTY
+# E   AssertionError: assert 'THIRDPARTY' == 'FIRSTPARTY'
+# >   raise ProfileDoesNotExist(profile_name)
+# E   isort.exceptions.ProfileDoesNotExist: Specified profile of example does not exist. Available profiles: black,django,pycharm,google,open_stack,plone,attrs,hug,wemake,appnexus.
+# Test irrelevant for us (FileNotFoundError)
+{% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %}  # [win and arm64]
+{% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_hooks.py::test_git_hook" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_place.py::test_module" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_isort_supports_shared_profiles_issue_970" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
 test:
   source_files:
     - tests/unit
@@ -71,7 +70,7 @@ test:
     - setuptools  # [py>=314]
 
 about:
-  home: https://github.com/timothycrosley/isort
+  home: https://isort.readthedocs.io
   license: MIT
   license_file: LICENSE
   license_family: MIT
@@ -82,8 +81,8 @@ about:
     Python library and plugins for various editors to quickly sort all your
     imports. It currently cleanly supports Python 2.6 - 3.5 using pies to
     achieve this without ugly hacks and/or py2to3.
-  doc_url: https://pycqa.github.io/isort
-  dev_url: https://github.com/timothycrosley/isort
+  doc_url: https://isort.readthedocs.io/
+  dev_url: https://github.com/PyCQA/isort
 
 extra:
   recipe-maintainers:
