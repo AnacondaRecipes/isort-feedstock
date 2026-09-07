@@ -1,5 +1,5 @@
 {% set name = "isort" %}
-{% set version = "8.0.1" %}
+{% set version = "9.0.1" %}
 
 package:
   name: {{ name }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d
+  sha256: ba23db109e3e93ef1999f7209a651214994cd807801addd16ac485982eb4edd7
 
 build:
-  number: 2
+  number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - isort = isort.main:main
@@ -25,11 +25,12 @@ requirements:
     - hatch-vcs
   run:
     - python
+    - mypy_extensions >=1.1.0
 
 # E   ModuleNotFoundError: No module named 'pylama'
 {% set ignore_tests = " --ignore=tests/unit/test_pylama_isort.py" %}
 # black module is unavailable on Windows ARM64, so we skip tests that require it
-{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %} # [win and arm64]
+{% set ignore_tests = ignore_tests + " --ignore=tests/unit/profiles/test_black.py" %}  # [win and arm64]
 {% set deselect_tests = " --deselect=tests/unit/test_importable.py::test_importable" %}
 # >   raise InvalidSettingsPath(settings_path)
 # E   isort.exceptions.InvalidSettingsPath: isort was told to use the settings_path: $SRC_DIR/isort as the base directory or file that represents the starting point of config file discovery, but it does not exist.
@@ -43,7 +44,6 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
 # Test irrelevant for us (FileNotFoundError)
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
-
 test:
   source_files:
     - tests/unit
@@ -65,12 +65,12 @@ test:
     - pytest-mock
     - trustme
     - uvloop  # [unix]
-    - black # [not (win and arm64)]
+    - black  # [not (win and arm64)]
     - colorama
     - setuptools  # [py>=314]
 
 about:
-  home: https://github.com/timothycrosley/isort
+  home: https://isort.readthedocs.io
   license: MIT
   license_file: LICENSE
   license_family: MIT
@@ -81,8 +81,8 @@ about:
     Python library and plugins for various editors to quickly sort all your
     imports. It currently cleanly supports Python 2.6 - 3.5 using pies to
     achieve this without ugly hacks and/or py2to3.
-  doc_url: https://pycqa.github.io/isort
-  dev_url: https://github.com/timothycrosley/isort
+  doc_url: https://isort.readthedocs.io/
+  dev_url: https://github.com/PyCQA/isort
 
 extra:
   recipe-maintainers:
