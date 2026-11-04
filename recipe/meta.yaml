@@ -44,6 +44,8 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_ticketed_features.py::test_sort_configurable_sort_issue_1732" %}
 # Test irrelevant for us (FileNotFoundError)
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_main.py::test_gitignore " %}
+# black module is unavailable on Windows ARM64; this test imports black directly
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_regressions.py::test_sort_reexports_output_is_black_stable_issue_2280" %}  # [win and arm64]
 test:
   source_files:
     - tests/unit
