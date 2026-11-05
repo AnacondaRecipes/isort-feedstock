@@ -66,7 +66,7 @@ test:
     - psutil
     - pytest-mock
     - trustme
-    - uvloop  # [unix]
+    - uvloop  # [unix and py<315]
     - black  # [not (win and arm64)]
     - colorama
     - setuptools  # [py>=314]
